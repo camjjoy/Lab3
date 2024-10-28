@@ -1,43 +1,41 @@
 import java.util.List;
 import java.util.Arrays;
 
-public class FastestSolves
-{
+public class FastestSolves {
+    private final int rank;
     private final String person;
     private final List<Integer> solves;
     private final int fastestSolve;
     private final String country;
 
-    public FastestSolves(String person, int[] solves, int fastestSolve, String country)
-    {
-       this.person = person;
-       this.solves = Arrays.asList(solves[0], solves[1], solves[2], solves[3], solves[4]);
-       this.fastestSolve = fastestSolve;
-       this.country = country;
+    public FastestSolves(int rank, String person, int[] solves, int fastestSolve, String country) {
+        this.rank = rank;
+        this.person = person;
+        //convert array to list for streams op.
+        this.solves = Arrays.asList(solves[0], solves[1], solves[2], solves[3], solves[4]);
+        this.fastestSolve = fastestSolve;
+        this.country = country;
     }
 
-    // Getters
-    public String getPerson() {return person;}
+    //getters
+    public int getRank() { return rank; }
+    public String getPerson() { return person; }
+    public List<Integer> getSolves() { return solves; }
+    public int getFastestSolve() { return fastestSolve; }
+    public String getCountry() { return country; }
 
-    public List<Integer> getSolves() {return solves;}
-
-    public int getFastestSolve() {return fastestSolve;}
-
-    public String getCountry() {return country;}
-
-    public double getAverageSolveTime()
-    {
-        return solves.stream().filter(solve->solve!= -1)
+    //calculate the average solve time
+    public double getAverageSolveTime() {
+        return solves.stream()
+                .filter(solve -> solve != -1) //doesnt include DNFs
                 .mapToInt(Integer::intValue)
                 .average()
-                .orElse(Double.NaN);
+                .orElse(Double.NaN); //error check
     }
 
-    public boolean DNF() {return solves.contains(-1);}
-
-    @Override
-    public String toString()
-    {
-        return "Person: " + person + ", Fastest Solve: " + fastestSolve + ", Country:" + country;
+    //check if any solve time is marked as DNF (-1)
+    public boolean DNF() {
+        return solves.contains(-1);
     }
+
 }

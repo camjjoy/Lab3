@@ -1,4 +1,42 @@
+import java.util.ArrayList;
 import java.util.List;
+
+public class FilterManager
+{
+    private final List<FastestSolves> originalSolvesList;
+    private final List<FilterStrategy> strateies = new ArrayList<>();
+
+    public FilterManager(List<FastestSolves> solvesList)
+    {
+        this.originalSolvesList = solvesList;
+    }
+
+    public void addStrategy(FilterStrategy strategy)
+    {
+        strateies.add(strategy);
+    }
+
+    public void clearStrategies()
+    {
+        strateies.clear();
+    }
+
+    public List<FastestSolves> getFilteredSolvesList()
+    {
+        List<FastestSolves> filteredList = originalSolvesList;
+        for (FilterStrategy strategy : strateies)
+        {
+            filteredList = strategy.apply(filteredList);
+        }
+        return filteredList;
+    }
+}
+
+
+
+
+
+/*import java.util.List;
 import java.util.stream.Collectors;
 
 public class FilterManager {
@@ -51,4 +89,5 @@ public class FilterManager {
         return filteredList; //return the filtered list based on applied filters
     }
 }
+*/
 

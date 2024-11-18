@@ -4,27 +4,45 @@ import java.util.List;
 public class FilterManager
 {
     private final List<FastestSolves> originalSolvesList;
-    private final List<FilterStrategy> strateies = new ArrayList<>();
+    private final List<FilterStrategy> strategies = new ArrayList<>();
+
+    //observers for observer pattern
+    private final List<ChartPanel> observers = new ArrayList<>();
+
 
     public FilterManager(List<FastestSolves> solvesList)
     {
         this.originalSolvesList = solvesList;
     }
 
+    //observer pattern
+    public void registerObserver(ChartPanel observer)
+    {
+        observers.add(observer);
+    }
+    public void notifyObservers()
+    {
+        for(ChartPanel observer : observers)
+        {
+            observer.updateChart(getFilteredSolvesList());
+        }
+    }
+
+    //strategy pattern
     public void addStrategy(FilterStrategy strategy)
     {
-        strateies.add(strategy);
+        strategies.add(strategy);
     }
 
     public void clearStrategies()
     {
-        strateies.clear();
+        strategies.clear();
     }
 
     public List<FastestSolves> getFilteredSolvesList()
     {
         List<FastestSolves> filteredList = originalSolvesList;
-        for (FilterStrategy strategy : strateies)
+        for (FilterStrategy strategy : strategies)
         {
             filteredList = strategy.apply(filteredList);
         }

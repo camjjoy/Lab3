@@ -4,7 +4,8 @@ import java.util.List;
 
 public class MainDisplay {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() ->
+        {
             //create the main application frame
             JFrame frame = new JFrame("Fastest Rubik's Cube Solves");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -18,17 +19,26 @@ public class MainDisplay {
             TablePanel tablePanel = new TablePanel(solvesList);
             StatsPanel statsPanel = new StatsPanel(solvesList);
             ChartPanel chartPanel = new ChartPanel(solvesList);
+
+
             DetailsPanel detailsPanel = new DetailsPanel();
 
             //FilterManager and corresponding FilterPanel
             FilterManager filterManager = new FilterManager(solvesList);
             FilterPanel filterPanel = new FilterPanel(filterManager, tablePanel, statsPanel, chartPanel);
 
+            //observer pattern
+            filterManager.registerObserver(chartPanel);
+
+
             //add a listener to update DetailsPanel when a row is selected in the TablePanel
-            tablePanel.getTable().getSelectionModel().addListSelectionListener(e -> {
-                if (!e.getValueIsAdjusting()) {
+            tablePanel.getTable().getSelectionModel().addListSelectionListener(e ->
+            {
+                if (!e.getValueIsAdjusting())
+                {
                     int selectedRow = tablePanel.getTable().getSelectedRow();
-                    if (selectedRow >= 0) {
+                    if (selectedRow >= 0)
+                    {
                         //converts table index to filtered index for selection
                         int modelRow = tablePanel.getTable().convertRowIndexToModel(selectedRow);
                         FastestSolves selectedSolve = tablePanel.getSolvesList().get(modelRow);
